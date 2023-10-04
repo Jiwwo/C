@@ -1,20 +1,23 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
 int main(int argc, char *argv[]) {
-    char *filename = argv[1];
-    char *info = argv[2];
-    FILE *file = fopen(filename, "r+");
-    fseek(file, 0, SEEK_END);
-    long size = ftell(file);
-    fseek(file, 0, SEEK_SET);
-    char *buffer = (char *) malloc(size * sizeof(char));
-    fread(buffer, sizeof(char), size, file);
-    fseek(file, 0, SEEK_SET);
-    fwrite(info, sizeof(char), strlen(info), file);
-    fwrite(buffer, sizeof(char), size, file);
-    free(buffer);
-    fclose(file);
-    return 0;
+    FILE *inputFile = fopen(argv[1], "r");
+    if (inputFile == NULL){
+        printf("ERROR of openning input file\n");
+        exit(EXIT_FAILURE);
+    }
+    const int N = 255;
+    char line[N], append_text[10000];
+    FILE *test_file = fopen("t1test.txt", "w");
+    printf("Введите данные который хотите записать в файл:\n");
+    fgets(append_text, 100, stdin);
+    fputs(append_text, test_file); 
+    fputs("\n", test_file);
+    while(fgets(line, N, inputFile) != NULL) { 
+        
+        fputs(line, test_file); 
+    }
+    fclose(inputFile);
+    fclose(test_file);
 }

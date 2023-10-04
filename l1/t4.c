@@ -1,10 +1,21 @@
 #include <stdio.h>
+#include <stdlib.h>
 
-int main(int *argc, char *argv[]) {
-    char *filename = argv[1];
-    FILE *fptr = fopen(filename, "r");
-    char myString[100];
-    fgets(myString, 100, fptr);
-    printf("%s", myString);
-    fclose(fptr); 
+int main(int argc, char *argv[])
+{
+    int N = 255;
+    FILE *file = fopen (argv[1], "r");
+
+    if (file == NULL){
+        printf("ERROR of inputing file");
+        exit(EXIT_FAILURE);
+    }
+    
+    while(fgets(line, N, file) != NULL) { 
+        printf("%s", line); 
+    }
+    
+    fclose(file);
+
+    return 0;
 }
