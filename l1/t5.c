@@ -11,7 +11,7 @@ int main(int argc, char *argv[]) {
     char line[N], append_text[10000];
     FILE *test_file = fopen("t1test.txt", "w");
     printf("Введите данные который хотите записать в файл:\n");
-    fgets(append_text, 100, stdin);
+    fgets(append_text, N, stdin);
     fputs(append_text, test_file); 
     fputs("\n", test_file);
     while(fgets(line, N, inputFile) != NULL) { 
