@@ -1,1 +1,4 @@
-24 86 38 1 10 18 54 49 84 34 70 7 
+product: pr1, price: 100.00
+product: pr2, price: 123.00
+product: pr3, price: 976.00
+product: pr4, price: 19901.00
