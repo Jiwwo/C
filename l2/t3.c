@@ -56,3 +56,4 @@ int main() {
     free(products);
     return 0;
 }
+//добавить поддержку имен с пробелами 

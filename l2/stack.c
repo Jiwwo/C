@@ -53,18 +53,3 @@ int peek(const struct Stack *stack){
     	return stack->head->value;
     }
 }
-
-void main() {
-	
-	int maxsize;
-    printf("input stack size: ");
-    scanf("%d", &maxsize);
-    struct Stack *stack = createStack();
-    for (int i = 0; i < 10; i++){
-        push(stack, i, maxsize);
-    }
-    while (stack->head) {
-        printf("peek:%d\n", peek(stack));
-        printf("pop:%d\n", pop(stack));	
-    }
-}

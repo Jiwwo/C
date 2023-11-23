@@ -2,79 +2,99 @@
 #include <stdlib.h>
 #include <ctype.h>
 
-#define STACK_SIZE 100
-int stack[STACK_SIZE];
-int top = -1;
+struct Node {
+    int data;
+    struct Node* next;
+};
 
-int isfull(){
-   if(top == STACK_SIZE)
-      return 1;
-   else
-      return 0;
-}
+struct Stack {
+    struct Node* top;
+};
 
-int isempty(){
-   if(top == -1)
-      return 1;
-   else
-      return 0;
-}
-
-int push(int data){
-   if(!isfull()) {
-      top = top + 1;
-      stack[top] = data;
-   } else {
-      printf("Could not insert data, Stack is full.\n");
-   }
-}
-
-int pop(){
-   int data;
-   if(!isempty()) {
-      data = stack[top];
-      top = top - 1;
-      return data;
-   } else {
-      printf("Could not retrieve data, Stack is empty.\n");
-   }
-}
-
-int main() {
-    char *inputFile = "input.txt";
-    FILE *file = fopen(inputFile, "r");
-    if (file == NULL) {
-        printf("error\n");
-        return 1;
+struct Node* createNode(int data) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    if (newNode == NULL) {
+        printf("Error of getting memory for node\n");
+        exit(EXIT_FAILURE);
     }
-    int ch;
-    while ((ch = fgetc(file)) != EOF) {
-        if (isdigit(ch)) {
-            push(ch - '0');
-        } else if (ch == '+' || ch == '-' || ch == '*' || ch == '/') {
-            int b = pop();
-            int a = pop();
-            switch (ch) {
+    newNode->data = data;
+    newNode->next = NULL;
+    return newNode;
+}
+
+struct Stack* createStack() {
+    struct Stack* newStack = (struct Stack*)malloc(sizeof(struct Stack));
+    if (newStack == NULL) {
+        printf("Error of getting memory for \n");
+        exit(EXIT_FAILURE);
+    }
+    newStack->top = NULL;
+    return newStack;
+}
+
+void push(struct Stack* stack, int data) {
+    struct Node* newNode = createNode(data);
+    newNode->next = stack->top;
+    stack->top = newNode;
+}
+
+int pop(struct Stack* stack) {
+    if (stack->top == NULL) {
+        printf("Stack is free, can't use pop\n");
+        exit(EXIT_FAILURE);
+    }
+    struct Node* temp = stack->top;
+    int data = temp->data;
+    stack->top = temp->next;
+    free(temp);
+    return data;
+}
+
+int main(int argc, char const *argv[]) {
+    FILE* file = fopen(argv[1], "r");
+
+    if (file == NULL) {
+        printf("Error of inputing file\n");
+        return -1;
+    }
+
+    struct Stack* stack = createStack();
+
+    char c;
+    while ((c = fgetc(file)) != EOF) {
+        if (isdigit(c)) {
+            push(stack, c - '0');
+        } else if (c == '+' || c == '-' || c == '*' || c == '/') {
+            int operand2 = pop(stack);
+            int operand1 = pop(stack);
+
+            switch (c) {
                 case '+':
-                    push(a + b);
+                    push(stack, operand1 + operand2);
                     break;
                 case '-':
-                    push(a - b);
+                    push(stack, operand1 - operand2);
                     break;
                 case '*':
-                    push(a * b);
+                    push(stack, operand1 * operand2);
                     break;
                 case '/':
-                    if (b == 0) {
-                        printf("clown?\n");
-                        exit(1);
-                    }
-                    push(a / b);
+                    push(stack, operand1 / operand2);
                     break;
             }
         }
     }
+
     fclose(file);
-    printf("result: %d\n", pop());
+
+    if (stack->top != NULL) {
+        int result = pop(stack);
+        printf("Result: %d\n", result);
+    } else {
+        printf("Error stack is free\n");
+    }
+
+    free(stack);
+
     return 0;
 }

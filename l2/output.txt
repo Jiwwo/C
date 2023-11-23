@@ -1,4 +1,5 @@
-product: pr1, price: 100.00
-product: pr2, price: 123.00
-product: pr3, price: 976.00
-product: pr4, price: 19901.00
+0.080152
+0.114249
+0.576943
+0.652163
+0.718432
