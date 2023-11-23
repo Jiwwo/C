@@ -1,58 +1,77 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <ctype.h>
+#include <ctype.h> 
 
-#define STACK_SIZE 100
+typedef struct {
+    char* expression;
+    size_t position;
+} ExpressionConverter;
 
-int define(char c) {
-    return (c == '+' || c == '-' || c == '*' || c == '/');
+void E(ExpressionConverter* converter);
+void T(ExpressionConverter* converter);
+void EPrime(ExpressionConverter* converter);
+void TPrime(ExpressionConverter* converter);
+void F(ExpressionConverter* converter);
+
+void ToPostfix(ExpressionConverter* converter) {
+    E(converter);
+    printf("\n");
 }
 
-int prio(char op) {
-    if (op == '+' || op == '-') {
-        return 1;
-    } else if (op == '*' || op == '/') {
-        return 2;
+void E(ExpressionConverter* converter) {
+    T(converter);
+    EPrime(converter);
+}
+
+void T(ExpressionConverter* converter) {
+    F(converter);
+    TPrime(converter);
+}
+
+void EPrime(ExpressionConverter* converter) {
+    if (converter->expression[converter->position] == '+' || converter->expression[converter->position] == '-') {
+        char op = converter->expression[converter->position];
+        converter->position++;
+        T(converter);
+        EPrime(converter);
+        printf("%c ", op);
+    }
+}
+
+void TPrime(ExpressionConverter* converter) {
+    if (converter->expression[converter->position] == '*' || converter->expression[converter->position] == '/') {
+        char op = converter->expression[converter->position];
+        converter->position++;
+        F(converter);
+        TPrime(converter);
+        printf("%c ", op);
+    }
+}
+
+void F(ExpressionConverter* converter) {
+    if (isdigit(converter->expression[converter->position])) {
+        printf("%c ", converter->expression[converter->position]);
+        converter->position++;
+    } else if (converter->expression[converter->position] == '(') {
+        converter->position++;
+        E(converter);
+        if (converter->expression[converter->position] == ')') {
+            converter->position++;
+        } else {
+            
+        }
     } else {
-        return 0;
+        
     }
 }
 
 int main() {
-    char infix[STACK_SIZE];
-    printf("type infix exp\n");
-    scanf("%s",infix);
-    char postfix[STACK_SIZE];
-    char oper[STACK_SIZE];
-    int top = -1;
-    int i, j;
-    for (i = 0, j = 0; infix[i] != '\0'; i++) {
-        char c = infix[i];
-        if (isdigit(c)) {
-            postfix[j++] = c;
-        } else if (c == '(') {
-            oper[++top] = c;
-        } else if (c == ')') {
-            while (top >= 0 && oper[top] != '(') {
-                postfix[j++] = oper[top--];
-            }
-            if (top >= 0 && oper[top] == '(') {
-                top--;
-            }
-        } else if (define(c)) {
-            while (top >= 0 && prio(oper[top]) >= prio(c)) {
-                postfix[j++] = oper[top--];
-            }
-            oper[++top] = c;
-        }
-    }
-    while (top >= 0) {
-        postfix[j++] = oper[top--];
-    }
-    postfix[j] = '\0';
-    printf("infix: %s\n", infix);
-    printf("postfix: %s\n", postfix);
+    char infixExpression[100];
+    printf("Введите инфиксиное выражение: ");
+    scanf("%s", infixExpression);
+    ExpressionConverter converter;
+    converter.expression = infixExpression;
+    converter.position = 0;
+    ToPostfix(&converter);
     return 0;
-} 
-//presentation 3 recursive 
+}
+
