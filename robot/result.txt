@@ -1,0 +1,16 @@
+Blue color is selected
+Blue color is already selected
+Robot moved to coordinate (5,2)
+Robot moved to coordinate (5,3)
+Robot moved to coordinate (5,4)
+Robot moved to coordinate (5,5)
+Robot moved to coordinate (5,6)
+Robot moved to coordinate (5,7)
+Robot moved to coordinate (5,8)
+Robot moved to coordinate (5,9)
+Robot moved to coordinate (5,10)
+Robot moved to coordinate (5,9)
+Robot moved to coordinate (6,9)
+Robot painted the row with blue (6,4) (6,9)
+Red color is selected
+Error: Robot cannot paint (6,4) (6,9) because it is already painted (6,4) (6,9)

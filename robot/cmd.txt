@@ -1,0 +1,15 @@
+colour (blue);
+colour (blue);
+while (area -> true up){
+    up (nothing, 1);
+}
+down (nothing, 1);
+if (area -> true right){
+    right (nothing, 1);
+}
+else{
+    left (nothing, 1);
+}
+down (paint, 5);
+colour (red);
+up (paint, 5);
